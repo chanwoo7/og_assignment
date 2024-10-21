@@ -4,7 +4,7 @@ body {
     padding: 0;
 }
 
-.container {
+.form-container {
     max-width: 700px;
     margin: 80px auto;
     background-color: #fff;
@@ -42,12 +42,6 @@ label {
     background-color: #fafafa;
     font-size: 15px;
     transition: border-color 0.3s ease;
-}
-
-.form-control:focus {
-    outline: none;
-    border-color: #ff7e67;
-    box-shadow: 0 0 5px rgba(255, 126, 103, 0.5);
 }
 
 .btn-primary {

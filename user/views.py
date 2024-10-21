@@ -1,7 +1,5 @@
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
 from django.http import JsonResponse
-from django.middleware.csrf import get_token
-from django.shortcuts import redirect, render
 from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -9,7 +7,7 @@ from rest_framework.views import APIView
 from .serializers import UserSignupSerializer
 
 
-class UserSignupView(APIView):
+class UserSignUpView(APIView):
     template_name = "user/signup.html"
     renderer_classes = [TemplateHTMLRenderer]
 
@@ -27,7 +25,7 @@ class UserSignupView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
-class UserSigninView(APIView):
+class UserSignInView(APIView):
     template_name = "user/signin.html"
     renderer_classes = [TemplateHTMLRenderer]
 
@@ -46,3 +44,9 @@ class UserSigninView(APIView):
         else:
             return JsonResponse({"success": False, "error": "잘못된 아이디 또는 비밀번호입니다."},
                                 status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserSignOutView(APIView):
+    def post(self, request):
+        logout(request)
+        return JsonResponse({"success": True}, status=status.HTTP_200_OK)
