@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 
 {% block title %}
-오픈갤러리 - 회원가입
+오픈갤러리 - 로그인
 {% endblock %}
 
 {% block statics %}
 <link href="/static/css/user/sign.css" rel="stylesheet">
-<script src="/static/js/user/signup.js"></script>
+<script src="/static/js/user/signin.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -15,7 +15,7 @@
         오픈갤러리
     </div>
     <div class="mb-5 h3">
-        회원가입
+        로그인
     </div>
     <form id="form" method="post" action="{% url 'signup' %}">
         {% csrf_token %}
@@ -25,16 +25,11 @@
         </div>
 
         <div class="mb-3">
-            <label for="password">비밀번호 (영어, 숫자, 특수문자 포함 8~16자)</label>
+            <label for="password">비밀번호</label>
             <input type="password" class="form-control" id="password" name="password" required>
         </div>
 
-        <div class="mb-5">
-            <label for="password2">비밀번호 확인</label>
-            <input type="password" class="form-control" id="password2" name="password2" required>
-        </div>
-
-        <button type="submit" class="btn btn-primary">회원가입</button>
+        <button type="submit" class="btn btn-primary">로그인</button>
     </form>
 
     <div id="message"></div>

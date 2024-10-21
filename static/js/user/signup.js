@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 const messageElement = document.querySelector('#message');
 
                 if (data.success) {
-                    window.location.href = "/";
+                    window.location.href = "/user/signin";
                 } else {
                     // 오류 메시지를 표시
                     let errorMessage = '';
