@@ -41,7 +41,7 @@ class UserSignupSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        user = User.objects.create(
+        user = get_user_model().objects.create(
             username=validated_data['username']
         )
         user.set_password(validated_data['password'])

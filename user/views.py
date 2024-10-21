@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.http import JsonResponse
+from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
@@ -18,6 +19,13 @@ class UserSignupView(APIView):
 
         if serializer.is_valid():
             serializer.save()
-            return redirect("/")
+            return JsonResponse({"success": True}, status=status.HTTP_201_CREATED)
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        return JsonResponse({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+# class UserSigninView(APIView):
+#     template_name = "user/signin.html"
+#     renderer_classes = [TemplateHTMLRenderer]
+#
+#     def get(self):
