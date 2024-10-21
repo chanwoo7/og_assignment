@@ -16,7 +16,12 @@ body {
 
 .h3 {
     text-align: center;
-    color: #444;
+    margin-bottom: 30px;
+    font-weight: 700;
+}
+
+.h5 {
+    text-align: center;
     margin-bottom: 30px;
     font-weight: 700;
 }
@@ -46,19 +51,14 @@ label {
 }
 
 .btn-primary {
-    background-color: #ff7e67;
     border: none;
     padding: 12px 0;
     color: #fff;
     font-size: 16px;
     border-radius: 8px;
     cursor: pointer;
-    width: 100%; /* 버튼이 가로로 flexing 하지 않도록 너비 고정 */
+    width: 100%;
     transition: background-color 0.3s ease;
-}
-
-.btn-primary:hover {
-    background-color: #ff5733;
 }
 
 #message {
