@@ -1,5 +1,7 @@
 from django.urls import path, include
+from core import views as core_views
 
 urlpatterns = [
-    path('user/', include('user.urls')),  # user 앱의 URL 연결
+    path('', core_views.IndexView.as_view(), name='index'),
+    path('user/', include('user.urls')),
 ]
