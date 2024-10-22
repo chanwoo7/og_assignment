@@ -45,7 +45,7 @@ class ArtistApplicationSerializer(serializers.ModelSerializer):
 
         # 신청자가 이미 대기 중인 신청이 있는지 체크
         if ArtistApplication.objects.filter(applicant=user, status='Pending').exists():
-            raise serializers.ValidationError("이미 대기 중인 신청이 존재합니다.")
+            raise serializers.ValidationError({"non_field_errors": ["이미 대기 중인 신청이 존재합니다."]})
 
         return ArtistApplication.objects.create(
             applicant=user,

@@ -51,15 +51,30 @@ document.addEventListener('DOMContentLoaded', function () {
             messageContainer.innerHTML = '';
 
             if (data.success) {
-                // 성공 시 alert 창을 띄운 후 메인 화면으로 이동
                 alert("신청이 성공적으로 완료되었습니다.");
                 window.location.href = "/";  // 메인 페이지로 리다이렉트
             } else {
-                // 오류 메시지를 필드별로 출력
                 let errorMessage = '';
-                for (let [field, errors] of Object.entries(data.errors)) {
-                    errorMessage += `${field}: ${errors.join(', ')}<br>`;
+
+                // 각 필드의 에러 메시지를 출력
+                try {
+                    for (let [field, errors] of Object.entries(data.errors)) {
+                        if (field !== 'non_field_errors') {
+                            errorMessage += `${field}: ${errors.join(', ')}<br>`;
+                        }
+                    }
+                } catch (error) {
+                    const errorsAsString = JSON.stringify(data.errors);
+                    // 'string=' 위치 찾기
+                    let startIndex = errorsAsString.indexOf("string='");
+                    startIndex += 8;
+
+                    // 그 뒤의 ' 위치 찾기
+                    let endIndex = errorsAsString.indexOf("'", startIndex);
+
+                    errorMessage = errorsAsString.substring(startIndex, endIndex);
                 }
+
                 messageContainer.innerHTML = errorMessage;
                 messageContainer.style.color = 'red';
             }
