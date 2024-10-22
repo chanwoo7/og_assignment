@@ -21,9 +21,9 @@ class Artist(models.Model):
     """
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)  # 1:1 관계로 User와 연결
-    name = models.CharField(max_length=64)
-    birth_date = models.DateField()
+    name = models.CharField(max_length=16)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    birth_date = models.DateField()
     email = models.EmailField()
     contact_number = models.CharField(max_length=13)
 
@@ -40,9 +40,9 @@ class ArtistApplication(models.Model):
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
 
     # 신청 시점의 작가 정보 저장
-    name = models.CharField(max_length=64)
-    birth_date = models.DateField()
+    name = models.CharField(max_length=16)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    birth_date = models.DateField()
     email = models.EmailField()
     contact_number = models.CharField(max_length=13)
 
