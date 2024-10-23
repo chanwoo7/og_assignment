@@ -38,6 +38,7 @@ class ArtistApplication(models.Model):
 
     applicant = models.ForeignKey(User, on_delete=models.CASCADE)  # 신청자
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Pending')
+    submitted_date = models.DateField(auto_now_add=True)
 
     # 신청 시점의 작가 정보 저장
     name = models.CharField(max_length=16)
