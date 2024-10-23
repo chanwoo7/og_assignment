@@ -1,5 +1,5 @@
+from django.db.models import Q
 from django.http import JsonResponse
-from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -33,7 +33,15 @@ class ProcessApplicationsView(APIView):
             applications = ArtistApplication.objects.filter(id__in=application_ids, status='Pending')
 
             if action == 'approve':
-                applications.update(status='Approved')
+                # 신청 승인 처리 및 유저의 is_artist 필드 업데이트
+                for application in applications:
+                    application.status = 'Approved'
+                    application.save()
+
+                    # 해당 신청자의 유저 정보 업데이트 (is_artist를 True로 설정)
+                    user = application.applicant
+                    user.is_artist = True
+                    user.save()
             elif action == 'reject':
                 applications.update(status='Rejected')
 
