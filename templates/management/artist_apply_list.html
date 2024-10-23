@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+
+{% block title %}
+작가 등록 신청 내역
+{% endblock %}
+
+{% block statics %}
+<link href="/static/css/management/list.css" rel="stylesheet">
+<script src="/static/js/management/artist_appy_list.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="mb-3 h5">
+        오픈갤러리
+    </div>
+    <div class="mb-5 h3">
+        작가 등록 신청 내역
+    </div>
+    <form id="application-form" method="post" action="{% url 'process_applications' %}">
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th><input type="checkbox" id="select-all"></th> <!-- 일괄 선택 체크박스 -->
+                    <th>이름</th>
+                    <th>성별</th>
+                    <th>생년월일</th>
+                    <th>이메일</th>
+                    <th>연락처</th>
+                    <th>상태</th>
+                    <th>신청일</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for application in applications %}
+                <tr>
+                    <td><input type="checkbox" name="applications" value="{{ application.id }}"></td>
+                    <td>{{ application.name }}</td>
+                    <td>{{ application.get_gender_display }}</td>
+                    <td>{{ application.birth_date }}</td>
+                    <td>{{ application.email }}</td>
+                    <td>{{ application.contact_number }}</td>
+                    <td>{{ application.get_status_display }}</td>
+                    <td>{{ application.submitted_date }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div>
+            <button type="submit" name="action" value="approve" class="btn btn-success btn-sm">일괄 승인</button>
+            <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">일괄 반려</button>
+        </div>
+    </form>
+
+    <div id="message"></div>
+</div>
+{% endblock %}
