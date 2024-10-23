@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import redirect
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
@@ -23,8 +24,10 @@ class ProcessApplicationsView(APIView):
     permission_classes = [IsAdminUser]
 
     def post(self, request):
-        application_ids = request.POST.getlist('applications')
-        action = request.POST.get('action')
+        application_ids = request.POST.getlist('applications')  # 체크된 신청 ID 리스트
+        action = request.POST.get('action')  # 'approve' 또는 'reject'
+
+        print(request.POST)  # 로그 추가
 
         if application_ids and action:
             applications = ArtistApplication.objects.filter(id__in=application_ids, status='Pending')
@@ -34,4 +37,6 @@ class ProcessApplicationsView(APIView):
             elif action == 'reject':
                 applications.update(status='Rejected')
 
-        return redirect('artist_application_list')
+            return JsonResponse({"success": True, "message": "선택한 신청들이 처리되었습니다."}, status=status.HTTP_200_OK)
+
+        return JsonResponse({"success": False, "message": "잘못된 요청입니다."}, status=status.HTTP_400_BAD_REQUEST)

@@ -6,7 +6,7 @@
 
 {% block statics %}
 <link href="/static/css/management/list.css" rel="stylesheet">
-<script src="/static/js/management/artist_appy_list.js"></script>
+<script src="/static/js/management/artist_apply_list.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -22,7 +22,7 @@
         <table class="table">
             <thead>
                 <tr>
-                    <th><input type="checkbox" id="select-all"></th> <!-- 일괄 선택 체크박스 -->
+                    <th><input type="checkbox" id="select-all"></th>
                     <th>이름</th>
                     <th>성별</th>
                     <th>생년월일</th>
@@ -34,8 +34,9 @@
             </thead>
             <tbody>
                 {% for application in applications %}
-                <tr>
-                    <td><input type="checkbox" name="applications" value="{{ application.id }}"></td>
+                <tr class="{% if application.status == 'Approved' %}table-success{% elif application.status == 'Rejected' %}table-danger{% endif %}">
+                    <td><input type="checkbox" name="applications" value="{{ application.id }}"
+                        {% if application.status != 'Pending' %}disabled{% endif %}></td>
                     <td>{{ application.name }}</td>
                     <td>{{ application.get_gender_display }}</td>
                     <td>{{ application.birth_date }}</td>
@@ -53,7 +54,5 @@
             <button type="submit" name="action" value="reject" class="btn btn-danger btn-sm">일괄 반려</button>
         </div>
     </form>
-
-    <div id="message"></div>
 </div>
 {% endblock %}

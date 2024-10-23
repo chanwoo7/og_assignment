@@ -34,6 +34,14 @@ table {
     border-collapse: collapse;
 }
 
+.table-success {
+    background-color: #d4edda;
+}
+
+.table-danger {
+    background-color: #f8d7da;
+}
+
 th, td {
     text-align: center;
 }
