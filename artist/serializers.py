@@ -8,7 +8,8 @@ from datetime import date
 class ArtistApplicationSerializer(serializers.ModelSerializer):
     class Meta:
         model = ArtistApplication
-        fields = ['name', 'gender', 'birth_date', 'email', 'contact_number']
+        fields = ['name', 'gender', 'birth_date', 'email', 'contact_number', 'submitted_date']
+        read_only_fields = ['submitted_date']  # 읽기 전용
 
     def validate_name(self, value):
         # 이름이 1~16자의 한글 또는 영문자인지 검사
