@@ -35,21 +35,19 @@ table {
 }
 
 .table-success {
-    background-color: #d4edda;
+    background-color: #76ff96;
 }
 
 .table-danger {
-    background-color: #f8d7da;
+    background-color: #ff7c89;
 }
 
 th, td {
     text-align: center;
 }
 
-.btn-sm {
-  font-size: 14px;
-  padding: 5px 14px;
-  margin: 0 5px;
+.btn-ar {
+  margin: 5px 5px;
   vertical-align: middle;
   text-align: center;
 }

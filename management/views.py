@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework import status
@@ -12,12 +14,35 @@ from artist.models import ArtistApplication
 class ArtistApplicationListView(APIView):
     template_name = "management/artist_apply_list.html"
     renderer_classes = [TemplateHTMLRenderer]
-    permission_classes = [IsAdminUser]  # 관리자 권한 설정
+    permission_classes = [IsAdminUser]
 
     def get(self, request):
-        # 모든 작가 등록 신청 내역을 가져옴, 최신순으로 정렬
+        search_field = request.GET.get('search_field', '')  # 드롭다운에서 선택된 검색 필드
+        search_query = request.GET.get('q', '')  # 검색어
+
+        # 기본적으로 최신순 정렬
         applications = ArtistApplication.objects.all().order_by('-id')
-        return Response({'applications': applications}, status=status.HTTP_200_OK)
+
+        # 검색어와 검색 필드가 있는 경우, 해당 필드에서 검색어로 필터링
+        if search_field and search_query:
+            if search_field == 'name':
+                applications = applications.filter(name__icontains=search_query)
+            elif search_field == 'gender':
+                applications = applications.filter(gender=search_query)
+            elif search_field == 'birth_date':
+                try:
+                    # "Y년 m월 d일" 형식을 datetime 객체로 변환
+                    search_date = datetime.strptime(search_query, '%Y년 %m월 %d일').date()
+                    applications = applications.filter(birth_date=search_date)  # 정확한 날짜 필터링
+                except ValueError:
+                    # 날짜 형식이 맞지 않을 경우 아무것도 필터링하지 않음
+                    applications = applications.none()
+            elif search_field == 'email':
+                applications = applications.filter(email__icontains=search_query)
+            elif search_field == 'contact_number':
+                applications = applications.filter(contact_number__icontains=search_query)
+
+        return Response({'applications': applications, 'search_field': search_field, 'search_query': search_query}, status=status.HTTP_200_OK)
 
 
 class ProcessApplicationsView(APIView):
