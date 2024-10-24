@@ -1,6 +1,19 @@
+// 소숫점 제거 및 천 단위로 콤마 추가
+function formatPrice(value) {
+    value = value.split('.')[0];  // 소숫점 아래의 숫자 제거
+    value = value.replace(/\D/g, '');  // 숫자만 남김
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // 천 단위마다 콤마 추가
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('#form');
     const messageContainer = document.querySelector('#message');
+    const prices = document.querySelectorAll('.price');
+
+    prices.forEach(function (priceElement) {
+        const originalPrice = priceElement.getAttribute('data-price');  // 원본 가격
+        priceElement.textContent = formatPrice(originalPrice);  // 포맷팅된 가격으로 업데이트
+    });
 
     flatpickr('#start_date', {
         dateFormat: 'Y-m-d',

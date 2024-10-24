@@ -41,7 +41,7 @@
                 <div class="form-check">
                     <input class="form-check-input" type="checkbox" value="{{ artwork.id }}" id="artwork_{{ artwork.id }}" name="artworks">
                     <label class="form-check-label" for="artwork_{{ artwork.id }}">
-                        {{ artwork.title }} ({{ artwork.price }}원, {{ artwork.size }}호)
+                        {{ artwork.title }} (<span class="price" data-price="{{ artwork.price }}">{{ artwork.price }}</span>원, {{ artwork.size }}호)
                     </label>
                 </div>
             {% endfor %}
