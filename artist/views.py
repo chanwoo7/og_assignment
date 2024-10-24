@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -5,8 +7,41 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from artist.models import Artist
 from artist.serializers import ArtistApplicationSerializer
 from core.permissions import IsNotArtist
+
+
+class ArtistListView(APIView):
+    template_name = 'artist/list.html'
+    renderer_classes = [TemplateHTMLRenderer]
+
+    def get(self, request):
+        # TODO: 코드 중복 리팩토링
+        search_field = request.GET.get('search_field', '')
+        search_query = request.GET.get('q', '')
+
+        # 기본적으로 최신순 정렬
+        artists = Artist.objects.all().order_by('-id')
+
+        # 검색 기능
+        if search_field and search_query:
+            if search_field == 'name':
+                artists = artists.filter(name__icontains=search_query)
+            elif search_field == 'gender':
+                artists = artists.filter(gender=search_query)
+            elif search_field == 'birth_date':
+                try:
+                    search_date = datetime.strptime(search_query, '%Y년 %m월 %d일').date()
+                    artists = artists.filter(birth_date=search_date)
+                except ValueError:
+                    artists = artists.none()
+            elif search_field == 'email':
+                artists = artists.filter(email__icontains=search_query)
+            elif search_field == 'contact_number':
+                artists = artists.filter(contact_number__icontains=search_query)
+
+        return Response({'artists': artists, 'search_field': search_field, 'search_query': search_query}, status=status.HTTP_200_OK)
 
 
 class ArtistApplicationView(APIView):
