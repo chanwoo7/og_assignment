@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}
+작가 등록 신청
+{% endblock %}
+
+{% block statics %}
+<link href="/static/css/sign.css" rel="stylesheet">
+<script src="/static/js/artwork/register.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="mb-3 h5">
+        오픈갤러리
+    </div>
+    <div class="mb-5 h3">
+        작품 등록
+    </div>
+    <form id="form" method="post" action="{% url 'artwork_register' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="title">제목 (64자 이하)</label>
+            <input type="text" class="form-control" id="title" name="title" required>
+        </div>
+        <div class="mb-3">
+            <label for="price">가격 (단위: 원)</label>
+            <input type="text" class="form-control" id="price" name="price" min="0" required>
+        </div>
+        <div class="mb-3">
+            <label for="size">호수 (1 이상 500 이하)</label>
+            <input type="number" class="form-control" id="size" name="size" min="1" max="500" required>
+        </div>
+        <button type="submit" class="btn btn-primary">등록</button>
+    </form>
+
+    <div id="message"></div>
+</div>
+{% endblock %}
