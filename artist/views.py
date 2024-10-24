@@ -6,12 +6,13 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from artist.serializers import ArtistApplicationSerializer
+from core.permissions import IsNotArtist
 
 
 class ArtistApplicationView(APIView):
     template_name = "artist/apply.html"
     renderer_classes = [TemplateHTMLRenderer]
-    permission_classes = [IsAuthenticated]  # 로그인된 사용자만 접근 가능
+    permission_classes = [IsAuthenticated, IsNotArtist]  # 로그인된 유저 중 작가가 아닌 유저만 접근 가능
 
     def get(self, request):
         return Response(status=status.HTTP_200_OK)
