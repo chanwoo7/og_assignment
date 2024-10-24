@@ -18,8 +18,12 @@ function handleFormSubmit(event, form, formData, messageContainer) {
             window.location.href = "/";  // TODO: 리다이렉트 주소도 parameter 처리할 것
         } else {
             let errorMessage = '';
-            for (let [field, errors] of Object.entries(data.errors)) {
-                errorMessage += `${field}: ${errors.join(', ')}<br>`;
+            try {
+                for (let [field, errors] of Object.entries(data.errors)) {
+                    errorMessage += `${field}: ${errors.join(', ')}<br>`;
+                }
+            } catch {  // 배열이 아니라면
+                errorMessage += data.error;
             }
             messageContainer.innerHTML = "<div class='alert alert-danger'>" + errorMessage + "</div>";
             messageContainer.style.color = 'red';
