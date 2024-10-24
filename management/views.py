@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from django.db.models import Q
 from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
@@ -8,7 +7,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from artist.models import ArtistApplication
+from artist.models import ArtistApplication, Artist
 
 
 class ArtistApplicationListView(APIView):
@@ -67,6 +66,19 @@ class ProcessApplicationsView(APIView):
                     user = application.applicant
                     user.is_artist = True
                     user.save()
+
+                    # Artist 객체 생성하여 해당 유저와 연결
+                    artist, created = Artist.objects.get_or_create(
+                        user=user,
+                        defaults={
+                            'name': application.name,
+                            'gender': application.gender,
+                            'birth_date': application.birth_date,
+                            'email': application.email,
+                            'contact_number': application.contact_number,
+                        }
+                    )
+
             elif action == 'reject':
                 applications.update(status='Rejected')
 
