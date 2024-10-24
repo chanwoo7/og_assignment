@@ -1,4 +1,4 @@
-// 검색 필드에 따라 검색어 입력 필드, 성별 드롭다운, 생년월일 입력 표시
+// 검색 필드에 따라 검색어 입력 필드, 성별 드롭다운, 생년월일 입력 필드 표시
 function toggleSearchFieldOfUser(selectedField) {
     const searchInputWrapper = document.getElementById('search-input-wrapper');
 
@@ -23,5 +23,22 @@ function toggleSearchFieldOfUser(selectedField) {
         searchInputWrapper.innerHTML = `
             <input type="text" name="q" class="form-control" placeholder="검색어 입력" value="">
         `;
+    }
+}
+
+// 검색 필드에 따라 검색어 입력 필드, 최소값-최대값 입력 필드 표시
+function toggleSearchFieldOfArtwork(selectedField) {
+    const searchInputWrapper = document.querySelector('#search-input-wrapper');
+    const rangeFields = document.querySelector('.range-fields');
+
+    if (selectedField === 'price' || selectedField === 'size') {
+        searchInputWrapper.classList.add('d-none');  // 단일 검색어 입력 필드 숨김
+        rangeFields.classList.remove('d-none');  // 범위 검색 필드 표시
+    } else {
+        searchInputWrapper.innerHTML = `
+            <input type="text" name="q" class="form-control" placeholder="검색어 입력" value="">
+        `;
+        searchInputWrapper.classList.remove('d-none');  // 단일 검색어 입력 필드 표시
+        rangeFields.classList.add('d-none');  // 범위 검색 필드 숨김
     }
 }
