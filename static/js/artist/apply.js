@@ -1,3 +1,4 @@
+// 전화번호에 하이픈 추가
 function addHyphenToPhoneNumber(phoneNumberInput) {
     let phoneNumber = phoneNumberInput.value.replace(/[^0-9]/g, "");
 
@@ -37,52 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
             contact_number: document.querySelector('#contact_number').value,
         };
 
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: JSON.stringify(formData),
-        })
-        .then(response => response.json())
-        .then(data => {
-            // 메시지 컨테이너 초기화
-            messageContainer.innerHTML = '';
-
-            if (data.success) {
-                alert("신청이 성공적으로 완료되었습니다.");
-                window.location.href = "/";  // 메인 페이지로 리다이렉트
-            } else {
-                let errorMessage = '';
-
-                // 각 필드의 에러 메시지를 출력
-                try {
-                    for (let [field, errors] of Object.entries(data.errors)) {
-                        if (field !== 'non_field_errors') {
-                            errorMessage += `${field}: ${errors.join(', ')}<br>`;
-                        }
-                    }
-                } catch (error) {
-                    const errorsAsString = JSON.stringify(data.errors);
-                    // 'string=' 위치 찾기
-                    let startIndex = errorsAsString.indexOf("string='");
-                    startIndex += 8;
-
-                    // 그 뒤의 ' 위치 찾기
-                    let endIndex = errorsAsString.indexOf("'", startIndex);
-
-                    errorMessage = errorsAsString.substring(startIndex, endIndex);
-                }
-
-                messageContainer.innerHTML = errorMessage;
-                messageContainer.style.color = 'red';
-            }
-        })
-        .catch(error => {
-            // 네트워크 또는 서버 오류 처리
-            messageContainer.innerHTML = "<div class='alert alert-danger'>서버와 통신 중 오류가 발생했습니다.</div>";
-            console.error('Error:', error);
-        });
+        handleFormSubmit(event, form, formData, messageContainer);
     });
 });

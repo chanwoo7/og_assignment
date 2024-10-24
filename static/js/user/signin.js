@@ -1,29 +1,15 @@
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('#form');
+    const messageContainer = document.querySelector('#message');
 
     form.addEventListener('submit', function (e) {
         e.preventDefault();
 
-        const formData = new FormData(form);
+        const formData = {
+            username: document.querySelector('#username').value,
+            password: document.querySelector('#password').value,
+        }
 
-        fetch('/user/signin/', {
-            method: 'POST',
-            headers: {
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: formData,
-        })
-        .then(response => response.json())
-        .then(data => {
-            const messageElement = document.querySelector('#message');
-
-            if (data.success) {
-                window.location.href = "/";
-            } else {
-                messageElement.innerHTML = data.error;
-                messageElement.style.color = 'red';
-            }
-        })
-        .catch(error => console.error('Error:', error));
+        handleFormSubmit(event, form, formData, messageContainer);
     });
 });

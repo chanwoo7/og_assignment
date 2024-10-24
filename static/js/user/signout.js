@@ -5,22 +5,11 @@ document.addEventListener('DOMContentLoaded', function () {
         signoutLink.addEventListener('click', function (e) {
             e.preventDefault();
 
-            // CSRF 토큰 가져오기
-            const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+            // 폼 객체 없이 빈 데이터와 빈 메시지 컨테이너 전달
+            const formData = {};
+            const messageContainer = '';
 
-            fetch('/user/signout/', {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                },
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        window.location.href = "/";  // 로그아웃 후 홈 페이지로 리다이렉트
-                    }
-                })
-                .catch(error => console.error('Error:', error));
+            handleFormSubmit(e, { action: '/user/signout/' }, formData, messageContainer);
         });
     }
 });

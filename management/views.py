@@ -48,10 +48,9 @@ class ProcessApplicationsView(APIView):
     permission_classes = [IsAdminUser]
 
     def post(self, request):
-        application_ids = request.POST.getlist('applications')  # 체크된 신청 ID 리스트
-        action = request.POST.get('action')  # 'approve' 또는 'reject'
-
-        print(request.POST)  # 로그 추가
+        request_data = request.data
+        application_ids = request_data['applications']  # 체크된 신청 ID 리스트
+        action = request_data['submitAction']  # 'approve' 또는 'reject'
 
         if application_ids and action:
             applications = ArtistApplication.objects.filter(id__in=application_ids, status='Pending')
