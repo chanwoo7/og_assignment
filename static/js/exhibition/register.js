@@ -1,6 +1,19 @@
+// 소숫점 제거 및 천 단위로 콤마 추가
+function formatPrice(value) {
+    value = value.split('.')[0];  // 소숫점 아래의 숫자 제거
+    value = value.replace(/\D/g, '');  // 숫자만 남김
+    return value.replace(/\B(?=(\d{3})+(?!\d))/g, ',');  // 천 단위마다 콤마 추가
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const form = document.querySelector('#form');
     const messageContainer = document.querySelector('#message');
+    const prices = document.querySelectorAll('.price');
+
+    prices.forEach(function (priceElement) {
+        const originalPrice = priceElement.getAttribute('data-price');  // 원본 가격
+        priceElement.textContent = formatPrice(originalPrice);  // 포맷팅된 가격으로 업데이트
+    });
 
     flatpickr('#start_date', {
         dateFormat: 'Y-m-d',
@@ -28,7 +41,7 @@ document.addEventListener('DOMContentLoaded', function () {
         // 작품을 하나도 선택하지 않은 경우 메시지 출력 및 제출 중단
         if (selectedArtworks.length === 0) {
             messageContainer.innerHTML = "<div class='alert alert-danger'>하나 이상의 작품을 선택해야 합니다.</div>";
-            return;  // 폼 제출 중단
+            return;
         }
 
         const formData = {
@@ -38,33 +51,6 @@ document.addEventListener('DOMContentLoaded', function () {
             artworks: selectedArtworks
         };
 
-        fetch(form.action, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
-            },
-            body: JSON.stringify(formData),
-        })
-        .then(response => response.json())
-        .then(data => {
-            messageContainer.innerHTML = '';
-
-            if (data.success) {
-                alert("전시가 성공적으로 등록되었습니다.");
-                window.location.href = "/";
-            } else {
-                let errorMessage = '';
-                for (let [field, errors] of Object.entries(data.errors)) {
-                    errorMessage += `${field}: ${errors.join(', ')}<br>`;
-                }
-                messageContainer.innerHTML = "<div class='alert alert-danger'>" + errorMessage + "</div>";
-                messageContainer.style.color = 'red';
-            }
-        })
-        .catch(error => {
-            messageContainer.innerHTML = "<div class='alert alert-danger'>서버와 통신 중 오류가 발생했습니다.</div>";
-            console.error('Error:', error);
-        });
+        handleFormSubmit(event, form, formData, messageContainer);
     });
 });

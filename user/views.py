@@ -33,8 +33,9 @@ class UserSignInView(APIView):
         return Response(status=status.HTTP_200_OK)
 
     def post(self, request):
-        username = request.POST.get('username')
-        password = request.POST.get('password')
+        request_data = request.data
+        username = request_data.get('username')
+        password = request_data.get('password')
 
         user = authenticate(request, username=username, password=password)
 
