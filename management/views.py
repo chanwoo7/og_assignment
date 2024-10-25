@@ -8,6 +8,9 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from artist.models import ArtistApplication, Artist
+from artwork.models import Artwork
+from exhibition.models import Exhibition
+from user.models import User
 
 
 class ArtistApplicationListView(APIView):
@@ -84,3 +87,35 @@ class ProcessApplicationsView(APIView):
             return JsonResponse({"success": True, "message": "선택한 신청들이 처리되었습니다."}, status=status.HTTP_200_OK)
 
         return JsonResponse({"success": False, "message": "잘못된 요청입니다."}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ManagementDashboardView(APIView):
+    template_name = "management/dashboard.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        # 승인 상태에 따른 각각의 신청 수
+        pending_applications_count = ArtistApplication.objects.filter(status='Pending').count()
+        approved_applications_count = ArtistApplication.objects.filter(status='Approved').count()
+        rejected_applications_count = ArtistApplication.objects.filter(status='Rejected').count()
+
+        # 가입된 유저, 작가 수
+        total_users_count = User.objects.count()
+        total_artists_count = Artist.objects.count()
+
+        # 작품, 전시 수
+        total_artworks_count = Artwork.objects.count()
+        total_exhibitions_count = Exhibition.objects.count()
+
+        context = {
+            'pending_applications_count': pending_applications_count,
+            'approved_applications_count': approved_applications_count,
+            'rejected_applications_count': rejected_applications_count,
+            'total_users_count': total_users_count,
+            'total_artists_count': total_artists_count,
+            'total_artworks_count': total_artworks_count,
+            'total_exhibitions_count': total_exhibitions_count,
+        }
+
+        return Response(context, status=status.HTTP_200_OK)
