@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from django.http import JsonResponse
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -9,7 +10,7 @@ from rest_framework.views import APIView
 
 from artist.models import Artist
 from artist.serializers import ArtistApplicationSerializer
-from core.permissions import IsNotArtist
+from core.permissions import IsNotArtist, IsArtist
 
 
 class ArtistListView(APIView):
@@ -64,3 +65,21 @@ class ArtistApplicationView(APIView):
 
         print(serializer.errors)  # 오류가 있을 때만 이 줄이 실행됨
         return JsonResponse({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ArtistDashboardView(APIView):
+    template_name = "artist/dashboard.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAuthenticated, IsArtist]
+
+    def get(self, request):
+        artist = get_object_or_404(Artist, user=request.user)  # 작가 정보 가져오기
+        artworks = artist.artwork_set.all().order_by('-id')  # 최신순으로 정렬된 작품 목록
+        exhibitions = artist.exhibition_set.all().order_by('-start_date')  # 시작일 기준 정렬된 전시 목록
+
+        context = {
+            'artist': artist,
+            'artworks': artworks,
+            'exhibitions': exhibitions
+        }
+        return Response(context)

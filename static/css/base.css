@@ -151,19 +151,6 @@ a {
   background-color: #ffffff;
   opacity: 0.3;
 }
-  /*.index-link a:before {*/
-  /*  content: "";*/
-  /*  position: absolute;*/
-  /*  bottom: -10px;*/
-  /*  background: #f9bf29;*/
-  /*  height: 5px;*/
-  /*  opacity: 1;*/
-  /*  visibility: visible;*/
-  /*  width: 0;*/
-  /*  -webkit-transition: .15s all ease-out;*/
-  /*  -o-transition: .15s all ease-out;*/
-  /*  transition: .15s all ease-out;*/
-  /*}*/
   .index-link a:hover {
     opacity: 1;
     text-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
