@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}
+작가 통계
+{% endblock %}
+
+{% block statics %}
+<link href="/static/css/table.css" rel="stylesheet">
+<script src="/static/js/format_number.js"></script>
+<script src="/static/js/management/artist_statistics.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <div class="mb-3 h5">
+        오픈갤러리
+    </div>
+    <div class="mb-5 h3">
+        작가 통계
+    </div>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>작가명</th>
+                <th>작품 수</th>
+                <th>전시 수</th>
+                <th>진행 중인 전시 수</th>
+                <th>100호 이하 작품 수</th>
+                <th>평균 작품 가격</th>
+                <th>총 작품 가격</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for artist in artist_statistics %}
+            <tr>
+                <td>{{ artist.name }}</td>
+                <td>{{ artist.total_artworks }}</td>
+                <td>{{ artist.total_exhibitions }}</td>
+                <td>{{ artist.ongoing_exhibitions }}</td>
+                <td>{{ artist.artworks_below_100_size }}</td>
+                <td><span class="price" data-price="{{ artist.average_artwork_price }}">{{ artist.average_artwork_price }}</span></td>
+                <td><span class="price" data-price="{{ artist.total_artwork_value }}">{{ artist.total_artwork_value }}</span></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
