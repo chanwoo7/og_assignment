@@ -1,6 +1,8 @@
 from datetime import datetime
 
+from django.db.models import Count, Avg, Sum, Q, OuterRef, Subquery
 from django.http import JsonResponse
+from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
 from rest_framework.renderers import TemplateHTMLRenderer
@@ -120,3 +122,32 @@ class ManagementDashboardView(APIView):
         }
 
         return Response(context, status=status.HTTP_200_OK)
+
+
+class ArtistStatisticsView(APIView):
+    template_name = "management/artist_statistics.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        today = timezone.now().date()
+
+        # 작가별 통계 계산
+        artist_statistics = Artist.objects.annotate(
+            # 작품 수
+            total_artworks=Count('artwork', distinct=True),
+            # 전시 수
+            total_exhibitions=Count('exhibition', distinct=True),
+            # 진행 중인 전시 수
+            ongoing_exhibitions=Count('exhibition',
+                                      filter=Q(exhibition__start_date__lte=today, exhibition__end_date__gte=today),
+                                      distinct=True),
+            # 100호 이하 작품 수
+            artworks_below_100_size=Count('artwork', filter=Q(artwork__size__lte=100)),
+            # 평균 작품 가격
+            average_artwork_price=Avg('artwork__price'),
+            # 총 작품 가격
+            total_artwork_value=Sum('artwork__price', distinct=True)
+        )
+
+        return Response({'artist_statistics': artist_statistics}, status.HTTP_200_OK)
