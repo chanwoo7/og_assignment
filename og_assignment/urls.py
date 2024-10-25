@@ -11,3 +11,5 @@ urlpatterns = [
     path('artwork/', include('artwork.urls')),
     path('exhibition/', include('exhibition.urls')),
 ]
+
+handler404 = 'common.views.page_not_found'
