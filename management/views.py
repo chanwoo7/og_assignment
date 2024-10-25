@@ -44,7 +44,8 @@ class ArtistApplicationListView(APIView):
             elif search_field == 'contact_number':
                 applications = applications.filter(contact_number__icontains=search_query)
 
-        return Response({'applications': applications, 'search_field': search_field, 'search_query': search_query}, status=status.HTTP_200_OK)
+        return Response({'applications': applications, 'search_field': search_field, 'search_query': search_query},
+                        status=status.HTTP_200_OK)
 
 
 class ProcessApplicationsView(APIView):
