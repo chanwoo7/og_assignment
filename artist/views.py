@@ -42,7 +42,8 @@ class ArtistListView(APIView):
             elif search_field == 'contact_number':
                 artists = artists.filter(contact_number__icontains=search_query)
 
-        return Response({'artists': artists, 'search_field': search_field, 'search_query': search_query}, status=status.HTTP_200_OK)
+        return Response({'artists': artists, 'search_field': search_field, 'search_query': search_query},
+                        status=status.HTTP_200_OK)
 
 
 class ArtistApplicationView(APIView):
@@ -82,4 +83,4 @@ class ArtistDashboardView(APIView):
             'artworks': artworks,
             'exhibitions': exhibitions
         }
-        return Response(context)
+        return Response(context, status=status.HTTP_200_OK)
