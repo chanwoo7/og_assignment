@@ -22,8 +22,8 @@
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <p>
-                    <a href="/artist/dashboard" class="btn btn-white-outline me-2">작가 대시보드</a>
-                    <a href="/management/dashboard" class="btn btn-white-outline">관리자 대시보드</a>
+                    <a href="{% url 'artist_dashboard' %}" class="btn btn-white-outline me-2">작가 대시보드</a>
+                    <a href="{% url 'management_dashboard' %}" class="btn btn-white-outline">관리자 대시보드</a>
                 </p>
             </div>
 
@@ -32,24 +32,22 @@
                 ●
             </div>
             <div class="d-flex justify-content-center index-link mb-4">
-                <a href="/artist/list">작가 목록 조회</a>
+                <a href="{% url 'artist_list' %}">작가 목록 조회</a>
             </div>
 
             <div class="d-flex justify-content-center mb-1">
                 ●
             </div>
             <div class="d-flex justify-content-center index-link mb-4">
-                <a href="/artwork/list">작품 목록 조회</a>
+                <a href="{% url 'artwork_list' %}">작품 목록 조회</a>
             </div>
 
             <div class="d-flex justify-content-center mb-1">
                 ●
             </div>
             <div class="d-flex justify-content-center index-link mb-4">
-                <a href="/artist/apply">작가 등록 신청</a>
+                <a href="{% url 'artist_apply' %}">작가 등록 신청</a>
             </div>
-
-
 
         </div>
     </div>
