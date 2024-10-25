@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 
 {% block title %}
-오픈갤러리 - 404 Not Found
+오픈갤러리 - 403 Forbidden
 {% endblock %}
 
 {% block statics %}
@@ -12,10 +12,10 @@
     <div class="container">
         <div class="row">
             <div class="d-flex justify-content-center mb-3">
-                <h1 class="extra-bold-text">404 Not Found</h1>
+                <h1 class="extra-bold-text">403 Forbidden</h1>
             </div>
             <div class="d-flex justify-content-center">
-                <p class="mb-5">해당 페이지를 찾을 수 없습니다.</p>
+                <p class="mb-5">해당 페이지에 접근할 수 없습니다.</p>
             </div>
             <div class="d-flex justify-content-center mb-5">
                 <a href="{% url 'index' %}" class="btn btn-white-outline">홈으로 돌아가기</a>
