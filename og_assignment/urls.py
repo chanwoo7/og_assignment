@@ -11,6 +11,3 @@ urlpatterns = [
     path('artwork/', include('artwork.urls')),
     path('exhibition/', include('exhibition.urls')),
 ]
-
-handler404 = 'core.views.page_not_found'
-handler403 = 'core.views.forbidden'

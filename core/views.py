@@ -11,13 +11,3 @@ class IndexView(APIView):
 
     def get(self, request):
         return Response(status=status.HTTP_200_OK)
-
-
-# 404 에러 처리
-def page_not_found(request, exception):
-    return render(request, "errors/404.html", {})
-
-
-# 403 에러 처리
-def forbidden(request, exception):
-    return render(request, "errors/403.html", {})
