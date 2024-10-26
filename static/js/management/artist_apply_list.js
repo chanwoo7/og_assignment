@@ -58,14 +58,14 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // CSV 다운로드 링크 업데이트 함수
     function updateDownloadLink() {
-        const searchFieldVal = searchFieldDropdown.value;
-        const searchInput = document.querySelector('#search-input-wrapper input, #search-input-wrapper select'); // 검색어 입력 필드 (동적)
-        const searchQueryVal = searchInput ? searchInput.value : '';
+        // 현재 URL에서 쿼리 파라미터 가져오기
+        const urlParams = new URLSearchParams(window.location.search);
+        const searchField = urlParams.get('search_field');
+        const searchQuery = urlParams.get('q');
 
-        const baseUrl = downloadLink.getAttribute('data-url'); // 기본 URL 가져오기
+        const baseUrl = downloadLink.getAttribute('data-url');
 
-        // URL에 검색 조건 쿼리 파라미터 추가
-        downloadLink.href = `${baseUrl}?search_field=${encodeURIComponent(searchFieldVal)}&q=${encodeURIComponent(searchQueryVal)}`;
+        downloadLink.href = `${baseUrl}?search_field=${encodeURIComponent(searchField)}&q=${encodeURIComponent(searchQuery)}`;
     }
 
     // 페이지 로드 시 링크 초기 업데이트
