@@ -36,3 +36,29 @@ class FilterMixin:
             elif search_field == 'contact_number':
                 artists = artists.filter(contact_number__icontains=search_query)
         return artists
+
+    # 작품 필터링 메서드
+    def filter_artwork(self, artworks, max_value, min_value, search_field, search_query):
+        # 검색 기능
+        if search_field == 'title' and search_query:
+            artworks = artworks.filter(title__icontains=search_query)
+        elif search_field == 'artist_name' and search_query:
+            # 작가명 검색 기능 추가
+            artworks = artworks.filter(artist__name__icontains=search_query)
+        elif search_field == 'price':
+            if min_value and max_value:
+                try:
+                    min_value = int(min_value)
+                    max_value = int(max_value)
+                    artworks = artworks.filter(price__gte=min_value, price__lte=max_value)
+                except ValueError:
+                    artworks = artworks.none()
+        elif search_field == 'size':
+            if min_value and max_value:
+                try:
+                    min_value = int(min_value)
+                    max_value = int(max_value)
+                    artworks = artworks.filter(size__gte=min_value, size__lte=max_value)
+                except ValueError:
+                    artworks = artworks.none()
+        return artworks

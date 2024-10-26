@@ -25,10 +25,10 @@ class ArtistApplicationListView(FilterMixin, APIView):
         search_field = request.GET.get('search_field', '')  # 드롭다운에서 선택된 검색 필드
         search_query = request.GET.get('q', '')  # 검색어
 
-        # 기본적으로 최신순 정렬
+        # 최신순 정렬
         applications = ArtistApplication.objects.all().order_by('-id')
 
-        # 검색어와 검색 필드가 있는 경우, 해당 필드에서 검색어로 필터링
+        # 신청자(작가) 검색
         applications = self.filter_artists(applications, search_field, search_query)
 
         return Response({'applications': applications, 'search_field': search_field, 'search_query': search_query},

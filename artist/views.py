@@ -22,10 +22,10 @@ class ArtistListView(FilterMixin, APIView):
         search_field = request.GET.get('search_field', '')
         search_query = request.GET.get('q', '')
 
-        # 기본적으로 최신순 정렬
+        # 최신순 정렬
         artists = Artist.objects.all().order_by('-id')
 
-        # search_field, search_query 기반 검색
+        # 작가 검색
         artists = self.filter_artists(artists, search_field, search_query)
 
         return Response({'artists': artists, 'search_field': search_field, 'search_query': search_query},
@@ -35,7 +35,7 @@ class ArtistListView(FilterMixin, APIView):
 class ArtistApplicationView(APIView):
     template_name = "artist/apply.html"
     renderer_classes = [TemplateHTMLRenderer]
-    permission_classes = [IsAuthenticated, IsNotArtist]  # 로그인된 유저 중 작가가 아닌 유저만 접근 가능
+    permission_classes = [IsAuthenticated, IsNotArtist]
 
     def get(self, request):
         return Response(status=status.HTTP_200_OK)

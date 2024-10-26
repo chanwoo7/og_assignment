@@ -8,9 +8,10 @@ from rest_framework.views import APIView
 from artwork.models import Artwork
 from artwork.serializers import ArtworkSerializer
 from core.permissions import IsArtist
+from core.views import FilterMixin
 
 
-class ArtworkListView(APIView):
+class ArtworkListView(FilterMixin, APIView):
     template_name = 'artwork/list.html'
     renderer_classes = [TemplateHTMLRenderer]
 
@@ -20,31 +21,11 @@ class ArtworkListView(APIView):
         min_value = request.GET.get('min_value', '')  # 범위 검색용 최소값
         max_value = request.GET.get('max_value', '')  # 범위 검색용 최대값
 
-        # 기본적으로 최신순 정렬
+        # 최신순 정렬
         artworks = Artwork.objects.all().order_by('-id')
 
-        # 검색 기능
-        if search_field == 'title' and search_query:
-            artworks = artworks.filter(title__icontains=search_query)
-        elif search_field == 'artist_name' and search_query:
-            # 작가명 검색 기능 추가
-            artworks = artworks.filter(artist__name__icontains=search_query)
-        elif search_field == 'price':
-            if min_value and max_value:
-                try:
-                    min_value = float(min_value)
-                    max_value = float(max_value)
-                    artworks = artworks.filter(price__gte=min_value, price__lte=max_value)
-                except ValueError:
-                    artworks = artworks.none()
-        elif search_field == 'size':
-            if min_value and max_value:
-                try:
-                    min_value = int(min_value)
-                    max_value = int(max_value)
-                    artworks = artworks.filter(size__gte=min_value, size__lte=max_value)
-                except ValueError:
-                    artworks = artworks.none()
+        # 작품 검색
+        artworks = self.filter_artwork(artworks, max_value, min_value, search_field, search_query)
 
         return Response({'artworks': artworks, 'search_field': search_field, 'search_query': search_query,
                          'min_value': min_value, 'max_value': max_value}, status=status.HTTP_200_OK)
