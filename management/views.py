@@ -143,7 +143,7 @@ class ArtistStatisticsView(APIView):
                                       filter=Q(exhibition__start_date__lte=today, exhibition__end_date__gte=today),
                                       distinct=True),
             # 100호 이하 작품 수
-            artworks_below_100_size=Count('artwork', filter=Q(artwork__size__lte=100)),
+            artworks_below_100_size=Count('artwork', filter=Q(artwork__size__lte=100), distinct=True),
             # 평균 작품 가격
             average_artwork_price=Avg('artwork__price'),
             # 총 작품 가격
