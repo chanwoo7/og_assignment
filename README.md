@@ -65,7 +65,8 @@
 
 ## 참고
 - 현재 웹사이트에서는 username: `admin`, password: `admin`인 유저가 관리자로 등록되어 있습니다.
-  - 현재 서버 측에서 `python manage createsuperuser` 명령어로 관리자 계정을 생성할 수 있습니다.
+  - 서버 측에서 `python manage createsuperuser` 명령어로 관리자 계정을 생성할 수 있습니다.
  
-- 로컬 환경 테스트를 원하시는 경우, 이 Repository를 클론하신 후 가상환경 설치 및 아래의 명령을 사용해주시면 됩니다.
-  - `python manage.py runserver --settings=og_assignment.settings.local`
+- 로컬 환경 테스트를 원하시는 경우, 이 Repository를 클론하신 후, 가상환경이 활성화된 상태에서 아래의 명령을 사용해주시면 됩니다.
+  - `$ pip install -r requirements.txt`
+  - `$ python manage.py runserver --settings=og_assignment.settings.local`
