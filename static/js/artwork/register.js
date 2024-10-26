@@ -18,6 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
             size: document.querySelector('#size').value,
         };
 
-        handleFormSubmit(event, form, formData, messageContainer);
+        handleFormSubmit(event, form, formData, messageContainer, "/artist/dashboard");
     });
 });

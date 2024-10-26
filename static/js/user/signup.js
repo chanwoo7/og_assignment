@@ -11,6 +11,6 @@ document.addEventListener('DOMContentLoaded', function () {
             password2: document.querySelector('#password2').value,
         };
 
-        handleFormSubmit(event, form, formData, messageContainer);
+        handleFormSubmit(event, form, formData, messageContainer, "/");
     })
 });

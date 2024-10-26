@@ -38,6 +38,6 @@ document.addEventListener('DOMContentLoaded', function () {
             contact_number: document.querySelector('#contact_number').value,
         };
 
-        handleFormSubmit(event, form, formData, messageContainer);
+        handleFormSubmit(event, form, formData, messageContainer, "/");
     });
 });

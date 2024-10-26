@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
             applications: applicationIds
         };
 
-        handleFormSubmit(event, form, formData, messageContainer);
+        handleFormSubmit(event, form, formData, messageContainer, "/management/dashboard");
     });
 
     // 검색 필드 전환, 초기화

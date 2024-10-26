@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', function () {
             const formData = {};
             const messageContainer = '';
 
-            handleFormSubmit(e, { action: '/user/signout/' }, formData, messageContainer);
+            handleFormSubmit(e, { action: '/user/signout/' }, formData, messageContainer, "/");
         });
     }
 });

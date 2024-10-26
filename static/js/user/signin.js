@@ -10,6 +10,6 @@ document.addEventListener('DOMContentLoaded', function () {
             password: document.querySelector('#password').value,
         }
 
-        handleFormSubmit(event, form, formData, messageContainer);
+        handleFormSubmit(event, form, formData, messageContainer, "/");
     });
 });

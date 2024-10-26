@@ -1,4 +1,4 @@
-function handleFormSubmit(event, form, formData, messageContainer) {
+function handleFormSubmit(event, form, formData, messageContainer, redirectUrl) {
     event.preventDefault();
 
     fetch(form.action, {
@@ -15,7 +15,7 @@ function handleFormSubmit(event, form, formData, messageContainer) {
 
         if (data.success) {
             alert("성공적으로 처리되었습니다.");
-            window.location.href = "/";  // TODO: 리다이렉트 주소도 parameter 처리할 것
+            window.location.href = redirectUrl;
         } else {
             let errorMessage = '';
             try {

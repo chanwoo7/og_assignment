@@ -44,6 +44,6 @@ document.addEventListener('DOMContentLoaded', function () {
             artworks: selectedArtworks
         };
 
-        handleFormSubmit(event, form, formData, messageContainer);
+        handleFormSubmit(event, form, formData, messageContainer, "/artist/dashboard");
     });
 });
