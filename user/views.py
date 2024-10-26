@@ -7,6 +7,7 @@ from rest_framework.views import APIView
 from .serializers import UserSignupSerializer
 
 
+# 회원가입 View
 class UserSignUpView(APIView):
     template_name = "user/signup.html"
     renderer_classes = [TemplateHTMLRenderer]
@@ -25,6 +26,7 @@ class UserSignUpView(APIView):
                             status=status.HTTP_400_BAD_REQUEST)
 
 
+# 로그인 View
 class UserSignInView(APIView):
     template_name = "user/signin.html"
     renderer_classes = [TemplateHTMLRenderer]
@@ -47,6 +49,7 @@ class UserSignInView(APIView):
                                 status=status.HTTP_400_BAD_REQUEST)
 
 
+# 로그아웃 View
 class UserSignOutView(APIView):
     def post(self, request):
         logout(request)

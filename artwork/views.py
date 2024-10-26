@@ -11,6 +11,7 @@ from core.permissions import IsArtist
 from core.views import FilterMixin
 
 
+# 작품 목록 조회 View
 class ArtworkListView(FilterMixin, APIView):
     template_name = 'artwork/list.html'
     renderer_classes = [TemplateHTMLRenderer]
@@ -31,6 +32,7 @@ class ArtworkListView(FilterMixin, APIView):
                          'min_value': min_value, 'max_value': max_value}, status=status.HTTP_200_OK)
 
 
+# 작품 등록 View
 class ArtworkRegistrationView(APIView):
     template_name = "artwork/register.html"
     renderer_classes = [TemplateHTMLRenderer]

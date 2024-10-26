@@ -9,6 +9,7 @@ from core.permissions import IsArtist
 from exhibition.serializers import ExhibitionSerializer
 
 
+# 전시 등록 View
 class ExhibitionRegistrationView(APIView):
     template_name = "exhibition/register.html"
     renderer_classes = [TemplateHTMLRenderer]

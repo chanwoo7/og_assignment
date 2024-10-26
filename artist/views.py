@@ -1,5 +1,3 @@
-from datetime import datetime
-
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from rest_framework import status
@@ -14,6 +12,7 @@ from core.permissions import IsNotArtist, IsArtist
 from core.views import FilterMixin
 
 
+# 작가 목록 View
 class ArtistListView(FilterMixin, APIView):
     template_name = 'artist/list.html'
     renderer_classes = [TemplateHTMLRenderer]
@@ -32,6 +31,7 @@ class ArtistListView(FilterMixin, APIView):
                         status=status.HTTP_200_OK)
 
 
+# 작가 등록 신청 View
 class ArtistApplicationView(APIView):
     template_name = "artist/apply.html"
     renderer_classes = [TemplateHTMLRenderer]
@@ -54,6 +54,7 @@ class ArtistApplicationView(APIView):
         return JsonResponse({"success": False, "errors": serializer.errors}, status=status.HTTP_400_BAD_REQUEST)
 
 
+# 작가 대시보드 View
 class ArtistDashboardView(APIView):
     template_name = "artist/dashboard.html"
     renderer_classes = [TemplateHTMLRenderer]

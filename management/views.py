@@ -16,6 +16,7 @@ from exhibition.models import Exhibition
 from user.models import User
 
 
+# 작가 등록 신청 내역 조회 View
 class ArtistApplicationListView(FilterMixin, APIView):
     template_name = "management/artist_apply_list.html"
     renderer_classes = [TemplateHTMLRenderer]
@@ -35,6 +36,7 @@ class ArtistApplicationListView(FilterMixin, APIView):
                         status=status.HTTP_200_OK)
 
 
+# 작가 등록 신청 처리(승인/반려) View
 class ProcessApplicationsView(APIView):
     permission_classes = [IsAdminUser]
 
@@ -77,67 +79,7 @@ class ProcessApplicationsView(APIView):
         return JsonResponse({"success": False, "message": "잘못된 요청입니다."}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ManagementDashboardView(APIView):
-    template_name = "management/dashboard.html"
-    renderer_classes = [TemplateHTMLRenderer]
-    permission_classes = [IsAdminUser]
-
-    def get(self, request):
-        # 승인 상태에 따른 각각의 신청 수
-        pending_applications_count = ArtistApplication.objects.filter(status='Pending').count()
-        approved_applications_count = ArtistApplication.objects.filter(status='Approved').count()
-        rejected_applications_count = ArtistApplication.objects.filter(status='Rejected').count()
-
-        # 가입된 유저, 작가 수
-        total_users_count = User.objects.count()
-        total_artists_count = Artist.objects.count()
-
-        # 작품, 전시 수
-        total_artworks_count = Artwork.objects.count()
-        total_exhibitions_count = Exhibition.objects.count()
-
-        context = {
-            'pending_applications_count': pending_applications_count,
-            'approved_applications_count': approved_applications_count,
-            'rejected_applications_count': rejected_applications_count,
-            'total_users_count': total_users_count,
-            'total_artists_count': total_artists_count,
-            'total_artworks_count': total_artworks_count,
-            'total_exhibitions_count': total_exhibitions_count,
-        }
-
-        return Response(context, status=status.HTTP_200_OK)
-
-
-class ArtistStatisticsView(APIView):
-    template_name = "management/artist_statistics.html"
-    renderer_classes = [TemplateHTMLRenderer]
-    permission_classes = [IsAdminUser]
-
-    def get(self, request):
-        today = timezone.now().date()
-
-        # 작가별 통계 계산
-        artist_statistics = Artist.objects.annotate(
-            # 작품 수
-            total_artworks=Count('artwork', distinct=True),
-            # 전시 수
-            total_exhibitions=Count('exhibition', distinct=True),
-            # 진행 중인 전시 수
-            ongoing_exhibitions=Count('exhibition',
-                                      filter=Q(exhibition__start_date__lte=today, exhibition__end_date__gte=today),
-                                      distinct=True),
-            # 100호 이하 작품 수
-            artworks_below_100_size=Count('artwork', filter=Q(artwork__size__lte=100), distinct=True),
-            # 평균 작품 가격
-            average_artwork_price=Avg('artwork__price'),
-            # 총 작품 가격
-            total_artwork_value=Sum('artwork__price', distinct=True)
-        )
-
-        return Response({'artist_statistics': artist_statistics}, status.HTTP_200_OK)
-
-
+# 작가 등록 신청 내역 CSV 다운로드 View
 class DownloadCSVView(FilterMixin, APIView):
     permission_classes = [IsAdminUser]  # 관리자 권한 설정
 
@@ -170,3 +112,66 @@ class DownloadCSVView(FilterMixin, APIView):
             ])
 
         return response
+
+
+# 관리자 대시보드 View
+class ManagementDashboardView(APIView):
+    template_name = "management/dashboard.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        # 승인 상태에 따른 각각의 신청 수
+        pending_applications_count = ArtistApplication.objects.filter(status='Pending').count()
+        approved_applications_count = ArtistApplication.objects.filter(status='Approved').count()
+        rejected_applications_count = ArtistApplication.objects.filter(status='Rejected').count()
+
+        # 가입된 유저, 작가 수
+        total_users_count = User.objects.count()
+        total_artists_count = Artist.objects.count()
+
+        # 작품, 전시 수
+        total_artworks_count = Artwork.objects.count()
+        total_exhibitions_count = Exhibition.objects.count()
+
+        context = {
+            'pending_applications_count': pending_applications_count,
+            'approved_applications_count': approved_applications_count,
+            'rejected_applications_count': rejected_applications_count,
+            'total_users_count': total_users_count,
+            'total_artists_count': total_artists_count,
+            'total_artworks_count': total_artworks_count,
+            'total_exhibitions_count': total_exhibitions_count,
+        }
+
+        return Response(context, status=status.HTTP_200_OK)
+
+
+# 작가 통계 View
+class ArtistStatisticsView(APIView):
+    template_name = "management/artist_statistics.html"
+    renderer_classes = [TemplateHTMLRenderer]
+    permission_classes = [IsAdminUser]
+
+    def get(self, request):
+        today = timezone.now().date()
+
+        # 작가별 통계 계산
+        artist_statistics = Artist.objects.annotate(
+            # 작품 수
+            total_artworks=Count('artwork', distinct=True),
+            # 전시 수
+            total_exhibitions=Count('exhibition', distinct=True),
+            # 진행 중인 전시 수
+            ongoing_exhibitions=Count('exhibition',
+                                      filter=Q(exhibition__start_date__lte=today, exhibition__end_date__gte=today),
+                                      distinct=True),
+            # 100호 이하 작품 수
+            artworks_below_100_size=Count('artwork', filter=Q(artwork__size__lte=100), distinct=True),
+            # 평균 작품 가격
+            average_artwork_price=Avg('artwork__price'),
+            # 총 작품 가격
+            total_artwork_value=Sum('artwork__price', distinct=True)
+        )
+
+        return Response({'artist_statistics': artist_statistics}, status.HTTP_200_OK)
