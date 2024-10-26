@@ -34,6 +34,7 @@
 - **Backend**: Django 4.2, Django REST framework 3.14.0
 - **Frontend**: HTML5, CSS3, JavaScript
 - **Library**: BootStrap5, flatpickr (날짜 선택 용도)
+- **Deployment**: AWS Lightsail, Nginx
 - **IDE**: PyCharm
 <br>
 
@@ -42,15 +43,15 @@
 <br>
 
 ## 프로젝트 설명
-### Backends
+### Backend
 - 전반적으로 Django 프레임워크를 이용해 **템플릿을 렌더링**하고, **동적으로 데이터를 처리**하는 구조를 구축했습니다.
 - 각 View 클래스마다 **GET 요청**과 **POST 요청**의 처리 방식을 구분했으며, 보다 RESTful하게 구현하고자 POST 요청 시에는 프론트엔드에 **JSON 형식의 응답**을 반환하여 해당 응답에 따라 프론트엔드에서의 처리 결과를 사용자에게 반환하도록 했습니다.
 
-### Frontends
+### Frontend
 - HTML, CSS, JavaScript, BootStrap을 함께 사용하여 구현했습니다.
 - 프론트엔드에서는 JavaScript를 이용하여, 비동기적으로 **AJAX 요청**을 수행하도록 구현했습니다.
 
-### Deployments
+### Deployment
 - **AWS 라이트세일 인스턴스**를 사용했으며, **Nginx**를 기반으로 웹 서버가 동작하게끔 구현했습니다.
 <br>
 
