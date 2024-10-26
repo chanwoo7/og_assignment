@@ -82,6 +82,11 @@
             <button type="submit" name="submitAction" value="reject" class="btn btn-primary btn-ar">일괄 반려</button>
         </div>
     </form>
+    <form method="get" action="{% url 'artist_application_list' %}" class="mb-5 d-flex align-items-center">
+        <a href="#" id="csv-download-link" class="btn btn-primary btn-ar mt-2"
+           data-url="{% url 'download_applications' %}">CSV 다운로드</a>
+    </form>
+
 
     <div id="message"></div>
 </div>

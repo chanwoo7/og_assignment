@@ -1,7 +1,7 @@
-from datetime import datetime
+import csv
 
-from django.db.models import Count, Avg, Sum, Q, OuterRef, Subquery
-from django.http import JsonResponse
+from django.db.models import Count, Avg, Sum, Q
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from rest_framework import status
 from rest_framework.permissions import IsAdminUser
@@ -11,11 +11,12 @@ from rest_framework.views import APIView
 
 from artist.models import ArtistApplication, Artist
 from artwork.models import Artwork
+from core.views import FilterMixin
 from exhibition.models import Exhibition
 from user.models import User
 
 
-class ArtistApplicationListView(APIView):
+class ArtistApplicationListView(FilterMixin, APIView):
     template_name = "management/artist_apply_list.html"
     renderer_classes = [TemplateHTMLRenderer]
     permission_classes = [IsAdminUser]
@@ -28,23 +29,7 @@ class ArtistApplicationListView(APIView):
         applications = ArtistApplication.objects.all().order_by('-id')
 
         # 검색어와 검색 필드가 있는 경우, 해당 필드에서 검색어로 필터링
-        if search_field and search_query:
-            if search_field == 'name':
-                applications = applications.filter(name__icontains=search_query)
-            elif search_field == 'gender':
-                applications = applications.filter(gender=search_query)
-            elif search_field == 'birth_date':
-                try:
-                    # "Y년 m월 d일" 형식을 datetime 객체로 변환
-                    search_date = datetime.strptime(search_query, '%Y년 %m월 %d일').date()
-                    applications = applications.filter(birth_date=search_date)  # 정확한 날짜 필터링
-                except ValueError:
-                    # 날짜 형식이 맞지 않을 경우 아무것도 필터링하지 않음
-                    applications = applications.none()
-            elif search_field == 'email':
-                applications = applications.filter(email__icontains=search_query)
-            elif search_field == 'contact_number':
-                applications = applications.filter(contact_number__icontains=search_query)
+        applications = self.filter_artists(applications, search_field, search_query)
 
         return Response({'applications': applications, 'search_field': search_field, 'search_query': search_query},
                         status=status.HTTP_200_OK)
@@ -151,3 +136,37 @@ class ArtistStatisticsView(APIView):
         )
 
         return Response({'artist_statistics': artist_statistics}, status.HTTP_200_OK)
+
+
+class DownloadCSVView(FilterMixin, APIView):
+    permission_classes = [IsAdminUser]  # 관리자 권한 설정
+
+    def get(self, request):
+        search_field = request.GET.get('search_field', '')  # 드롭다운에서 선택된 검색 필드
+        search_query = request.GET.get('q', '')  # 검색어
+
+        # 기본적으로 최신순 정렬
+        applications = ArtistApplication.objects.all().order_by('-id')
+
+        # 검색어와 검색 필드가 있는 경우, 해당 필드에서 검색어로 필터링
+        applications = self.filter_artists(applications, search_field, search_query)
+
+        # CSV 파일 생성
+        response = HttpResponse(content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename="artist_applications.csv"'
+
+        writer = csv.writer(response)
+        writer.writerow(['이름', '성별', '생년월일', '이메일', '연락처', '상태', '신청일'])
+
+        for application in applications:
+            writer.writerow([
+                application.name,
+                application.get_gender_display(),
+                application.birth_date,
+                application.email,
+                application.contact_number,
+                application.get_status_display(),
+                application.submitted_date
+            ])
+
+        return response
