@@ -8,7 +8,7 @@
 ## 프로젝트 개요
 이 프로젝트는 **Django 프레임워크** 기반의 풀스택 웹 프로젝트이며, 오픈갤러리 개발 과제 프로젝트입니다.<br>
 - 웹 사이트 주소
-  - https://opengalleryassignment.site/
+  - https://opengalleryassignment.site/ (현재 호스팅 종료)
 <br>
 
 ## 개발 과정
